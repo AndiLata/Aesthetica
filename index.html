@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aesthetica</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0a0a0a;
+  --offwhite: #f2efe9;
+  --warm-white: #faf8f3;
+  --muted: #888074;
+  --border: rgba(10,10,10,0.12);
+  --border-strong: rgba(10,10,10,0.25);
+  --rust: #c4390a;
+  --rust-light: #f5e8e2;
+  --gold: #c89b2a;
+  --gold-light: #faf2dd;
+  --sage: #2e5c3e;
+  --sage-light: #e4ede7;
+  --violet: #4a2d7a;
+  --violet-light: #ede7f7;
+  --ink-blue: #1a2a4a;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--offwhite);
+  color: var(--black);
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  background: var(--black);
+  padding: 0 1.5rem;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.06em;
+  color: var(--offwhite);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--rust);
+  display: inline-block;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.header-stat {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.header-stat strong {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+.btn-create {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--rust);
+  color: #fff;
+  border: none;
+  padding: 0.42rem 1rem;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.btn-create:hover { background: #a32d07; }
+
+/* ── TABS ── */
+.tabs {
+  background: var(--black);
+  border-top: 1px solid rgba(255,255,255,0.06);
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.4);
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+.tab:hover { color: rgba(255,255,255,0.75); }
+.tab.active { color: var(--offwhite); border-bottom-color: var(--rust); }
+
+/* ── PAGES ── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── VISION FEED HERO ── */
+.feed-hero {
+  background: var(--black);
+  padding: 2rem 1.5rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.feed-hero-bg {
+  position: absolute;
+  inset: 0;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 10rem;
+  line-height: 1;
+  color: rgba(255,255,255,0.025);
+  pointer-events: none;
+  padding: 0 1rem;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.feed-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.2rem, 7vw, 4rem);
+  letter-spacing: 0.04em;
+  color: var(--offwhite);
+  line-height: 0.95;
+  position: relative;
+}
+
+.feed-hero h1 span { color: var(--rust); }
+
+.feed-hero p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.45);
+  margin-top: 0.7rem;
+  max-width: 420px;
+  line-height: 1.6;
+  position: relative;
+}
+
+.ticker {
+  margin-top: 1.2rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.ticker-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5);
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.ticker-pill:hover, .ticker-pill.active {
+  background: var(--rust);
+  border-color: var(--rust);
+  color: #fff;
+}
+
+/* ── VISION CARD GRID ── */
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+
+.vision-card {
+  background: var(--warm-white);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.vision-card:hover { background: #fff; }
+
+.card-img {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  position: relative;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-img-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  position: relative;
+}
+
+.card-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.card-badges {
+  position: absolute;
+  top: 0.6rem;
+  left: 0.6rem;
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.badge-pill {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 0.18rem 0.5rem;
+  border-radius: 2px;
+  font-weight: 700;
+}
+.badge-ai { background: var(--violet); color: #e8dfff; }
+.badge-resident { background: var(--sage); color: #d0e8d8; }
+.badge-activated { background: var(--rust); color: #ffe0d8; }
+.badge-hot { background: var(--gold); color: #3d2a00; }
+
+.card-vote-count {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.6rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: rgba(255,255,255,0.9);
+  line-height: 1;
+}
+
+.card-body {
+  padding: 0.9rem 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.card-loc {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+
+.card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.2rem;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  color: var(--black);
+}
+
+.card-desc {
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
+.vote-strip {
+  flex: 1;
+  height: 4px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 0;
+  overflow: hidden;
+  margin-right: 0.7rem;
+}
+.vote-fill {
+  height: 100%;
+  background: var(--sage);
+  border-radius: 0;
+  transition: width 0.5s ease;
+}
+.vote-fill.activated { background: var(--rust); }
+
+.vote-btn {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.65rem;
+  border: 1.5px solid var(--black);
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.12s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.vote-btn:hover { background: var(--black); color: #fff; }
+.vote-btn.voted { background: var(--sage); border-color: var(--sage); color: #fff; }
+.vote-btn.activated-btn { background: var(--rust); border-color: var(--rust); color: #fff; }
+
+/* ── CREATE MODAL ── */
+.modal-wrap {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 500;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+}
+.modal-wrap.open { display: flex; }
+
+.modal {
+  background: var(--warm-white);
+  width: 100%;
+  max-width: 580px;
+  max-height: 92vh;
+  overflow-y: auto;
+  border-radius: 8px 8px 0 0;
+  animation: slideUp 0.28s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(60px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  background: var(--black);
+  padding: 1.2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.modal-header h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  letter-spacing: 0.06em;
+  color: var(--offwhite);
+}
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.4);
+  font-size: 1.4rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0.2rem;
+}
+.modal-close:hover { color: #fff; }
+
+.modal-body { padding: 1.5rem; }
+
+/* Mode picker */
+.mode-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+.mode-card {
+  border: 2px solid var(--border-strong);
+  background: #fff;
+  padding: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.15s;
+  text-align: center;
+}
+.mode-card:hover { border-color: var(--black); }
+.mode-card.selected { border-color: var(--rust); background: var(--rust-light); }
+.mode-icon { font-size: 1.8rem; margin-bottom: 0.4rem; display: block; }
+.mode-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  color: var(--black);
+  display: block;
+}
+.mode-desc {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.25rem;
+  line-height: 1.4;
+  display: block;
+}
+
+/* Form elements */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+.field-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.field-input {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.88rem;
+  color: var(--black);
+  background: #fff;
+  border: 1.5px solid var(--border-strong);
+  padding: 0.6rem 0.8rem;
+  outline: none;
+  border-radius: 3px;
+  transition: border-color 0.15s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+.field-input:focus { border-color: var(--black); }
+textarea.field-input { resize: vertical; min-height: 80px; }
+
+.upload-zone {
+  border: 2px dashed var(--border-strong);
+  padding: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 3px;
+  transition: border-color 0.15s;
+}
+.upload-zone:hover { border-color: var(--rust); }
+.upload-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.upload-icon-big { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
+
+.ai-panel {
+  background: var(--violet-light);
+  border: 1.5px solid rgba(74,45,122,0.2);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+.ai-panel-header {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--violet);
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.ai-disclaimer {
+  font-size: 0.7rem;
+  color: var(--violet);
+  opacity: 0.8;
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+.category-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.chip {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 0.3rem 0.7rem;
+  border: 1.5px solid var(--border-strong);
+  background: #fff;
+  cursor: pointer;
+  border-radius: 2px;
+  color: var(--black);
+  transition: all 0.12s;
+  font-weight: 700;
+}
+.chip:hover { background: var(--black); color: #fff; border-color: var(--black); }
+.chip.selected { background: var(--black); color: #fff; border-color: var(--black); }
+
+.btn-submit {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: var(--rust);
+  color: #fff;
+  border: none;
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 3px;
+  margin-top: 0.5rem;
+  transition: background 0.15s;
+}
+.btn-submit:hover { background: #a32d07; }
+
+/* ── AI STATUS ── */
+.ai-generating {
+  display: none;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.8rem 1rem;
+  background: var(--violet-light);
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+.ai-generating.show { display: flex; }
+.spinner {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(74,45,122,0.2);
+  border-top-color: var(--violet);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.ai-gen-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--violet);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── DETAIL MODAL ── */
+.detail-modal-wrap {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  z-index: 600;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.detail-modal-wrap.open { display: flex; }
+.detail-modal {
+  background: var(--warm-white);
+  width: 100%;
+  max-width: 520px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 6px;
+  animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+
+.detail-img {
+  aspect-ratio: 16/9;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+  border-radius: 6px 6px 0 0;
+  overflow: hidden;
+  position: relative;
+}
+.detail-body { padding: 1.2rem 1.5rem; }
+.detail-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.3rem;
+}
+.detail-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  display: flex;
+  gap: 1rem;
+}
+.detail-desc { font-size: 0.85rem; line-height: 1.65; color: var(--black); }
+.detail-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+.btn-vote-detail {
+  flex: 1;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem;
+  border: 2px solid var(--black);
+  background: transparent;
+  color: var(--black);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+.btn-vote-detail:hover { background: var(--black); color: #fff; }
+.btn-vote-detail.voted { background: var(--sage); border-color: var(--sage); color: #fff; }
+.btn-close-detail {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--border-strong);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.15s;
+}
+
+.progress-bar-detail {
+  margin-top: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.progress-track {
+  flex: 1;
+  height: 8px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.progress-fill-detail {
+  height: 100%;
+  background: var(--sage);
+  border-radius: 1px;
+  transition: width 0.5s ease;
+}
+.progress-fill-detail.hot { background: var(--rust); }
+.progress-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+/* ── COMMUNITY PAGE ── */
+.community-hero {
+  background: var(--ink-blue);
+  padding: 2rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+.community-hero h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.04em;
+  color: var(--offwhite);
+  line-height: 0.95;
+}
+.community-hero h1 span { color: var(--gold); }
+.community-hero p {
+  font-size: 0.82rem;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.6rem;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+.community-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 500px) { .community-grid { grid-template-columns: 1fr; } }
+
+.stat-block {
+  background: var(--warm-white);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+.stat-block-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 3rem;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.stat-block-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.stat-block-sub {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 0.2rem;
+  line-height: 1.4;
+}
+
+.activated-feed {
+  padding: 1.5rem;
+}
+.activated-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: flex-start;
+}
+.activated-item:last-child { border-bottom: none; }
+.activated-icon {
+  width: 44px; height: 44px;
+  border-radius: 3px;
+  background: var(--rust-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.activated-info { flex: 1; }
+.activated-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+}
+.activated-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.activated-votes {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.4rem;
+  color: var(--rust);
+  line-height: 1;
+}
+
+/* ── ABOUT ── */
+.about-section {
+  max-width: 640px;
+  padding: 2.5rem 1.5rem;
+}
+.about-section h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.8rem;
+}
+.about-section p {
+  font-size: 0.88rem;
+  line-height: 1.75;
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+.about-section p strong { color: var(--black); font-weight: 600; }
+
+.principle-row {
+  display: flex;
+  gap: 0.8rem;
+  padding: 1rem 0;
+  border-top: 1px solid var(--border);
+  align-items: flex-start;
+}
+.principle-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+  color: var(--rust);
+  line-height: 1;
+  width: 2rem;
+  flex-shrink: 0;
+}
+.principle-text h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+}
+.principle-text p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: var(--black);
+  color: var(--offwhite);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.75rem 1.4rem;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  border-left: 3px solid var(--rust);
+  border-radius: 2px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); }
+
+/* Colorful card backgrounds */
+.bg-rust { background: #2a1008; }
+.bg-sage { background: #0d1f14; }
+.bg-violet { background: #180f2e; }
+.bg-gold { background: #1e1600; }
+.bg-blue { background: #0c1520; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <span class="logo-dot"></span>
+    Aesthetica
+  </div>
+  <div class="header-right">
+    <div class="header-stat" id="hstat-visions">
+      <strong id="hstat-v-num">4</strong> visions
+    </div>
+    <div class="header-stat" id="hstat-votes">
+      <strong id="hstat-votes-num">28</strong> votes
+    </div>
+    <button class="btn-create" onclick="openCreate()">+ Drop a Vision</button>
+  </div>
+</header>
+
+<nav class="tabs">
+  <button class="tab active" onclick="showPage('feed', this)">Vision Feed</button>
+  <button class="tab" onclick="showPage('community', this)">Community</button>
+  <button class="tab" onclick="showPage('about', this)">About</button>
+</nav>
+
+<!-- ════════════════════════════
+     FEED PAGE
+════════════════════════════ -->
+<div class="page active" id="page-feed">
+  <div class="feed-hero">
+    <div class="feed-hero-bg">VISION</div>
+    <h1>What does<br>your block<br><span>deserve?</span></h1>
+    <p>Drop a vision. The community votes it into reality. Aesthetic justice isn't decoration — it's power.</p>
+    <div class="ticker">
+      <span class="ticker-pill active" onclick="filterFeed('all', this)">All</span>
+      <span class="ticker-pill" onclick="filterFeed('mural', this)">Murals</span>
+      <span class="ticker-pill" onclick="filterFeed('garden', this)">Gardens</span>
+      <span class="ticker-pill" onclick="filterFeed('lighting', this)">Lighting</span>
+      <span class="ticker-pill" onclick="filterFeed('sculpture', this)">Sculpture</span>
+      <span class="ticker-pill" onclick="filterFeed('seating', this)">Gathering</span>
+    </div>
+  </div>
+  <div class="feed-grid" id="feed-grid"></div>
+</div>
+
+<!-- ════════════════════════════
+     COMMUNITY PAGE
+════════════════════════════ -->
+<div class="page" id="page-community">
+  <div class="community-hero">
+    <h1>The community<br>has spoken <span>.</span></h1>
+    <p>Proposals ratified by residents. These are mandates — not suggestions.</p>
+  </div>
+
+  <div class="community-grid">
+    <div class="stat-block" style="border-right: 1px solid var(--border);">
+      <div class="stat-block-num" style="color:var(--rust)" id="c-stat-visions">4</div>
+      <div class="stat-block-label">Total Visions</div>
+      <div class="stat-block-sub">Submitted by residents across the community</div>
+    </div>
+    <div class="stat-block">
+      <div class="stat-block-num" style="color:var(--sage)" id="c-stat-votes">28</div>
+      <div class="stat-block-label">Community Votes</div>
+      <div class="stat-block-sub">Residents actively shaping their environment</div>
+    </div>
+    <div class="stat-block" style="border-right: 1px solid var(--border); border-top: 1px solid var(--border);">
+      <div class="stat-block-num" style="color:var(--gold)" id="c-stat-activated">1</div>
+      <div class="stat-block-label">Activated Mandates</div>
+      <div class="stat-block-sub">Reached 15-vote threshold — ready for real-world action</div>
+    </div>
+    <div class="stat-block" style="border-top: 1px solid var(--border);">
+      <div class="stat-block-num" style="color:var(--violet)" id="c-stat-ai">2</div>
+      <div class="stat-block-label">AI-Assisted Visions</div>
+      <div class="stat-block-sub">Where residents used AI as a paintbrush, not an author</div>
+    </div>
+  </div>
+
+  <div style="padding: 1.5rem 1.5rem 0.5rem;">
+    <div style="font-family:'Space Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);margin-bottom:0.3rem;">Activated Mandates</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:0.04em;">Ready for the room</div>
+  </div>
+  <div class="activated-feed" id="activated-feed"></div>
+</div>
+
+<!-- ════════════════════════════
+     ABOUT PAGE
+════════════════════════════ -->
+<div class="page" id="page-about">
+  <div class="about-section">
+    <h2>What is Aesthetica?</h2>
+    <p>
+      <strong>Aesthetica is a community power tool.</strong> It exists because affordable housing residents are constantly told that their surroundings don't matter — that basic shelter is enough. Decades of research in urban studies, neuroscience, and the sociology of place say otherwise.
+    </p>
+    <p>
+      When communities control the aesthetics of their space — when they author it, vote on it, and own it — something changes. Belonging deepens. Recovery accelerates. Organizing becomes possible. This is <strong>aesthetic justice</strong>.
+    </p>
+    <p>
+      Aesthetica gives residents two creative paths and one democratic mechanism. Drop your vision. Let the community ratify it. Take the mandate into any room that needs to hear it.
+    </p>
+
+    <div style="margin-top: 1.5rem;">
+      <div class="principle-row">
+        <div class="principle-num">01</div>
+        <div class="principle-text">
+          <h4>Residents are the authors</h4>
+          <p>AI is a tool — one option among many. The vision, the intent, the choice to use it or reject it: that belongs to the person who lives here.</p>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-num">02</div>
+        <div class="principle-text">
+          <h4>Community ratification is democracy</h4>
+          <p>A single voice is a suggestion. Fifteen votes is a mandate. The threshold turns individual vision into collective will.</p>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-num">03</div>
+        <div class="principle-text">
+          <h4>Neglect is not neutral</h4>
+          <p>Choosing not to invest in a community's appearance is a political act. Aesthetica makes that visible and builds the case for change.</p>
+        </div>
+      </div>
+      <div class="principle-row">
+        <div class="principle-num">04</div>
+        <div class="principle-text">
+          <h4>This is a movement, not an app</h4>
+          <p>Plumley Village is the proof of concept. Every community with a housing authority that doesn't listen is the next chapter.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════
+     CREATE MODAL
+════════════════════════════ -->
+<div class="modal-wrap" id="create-modal" onclick="handleModalBgClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>Drop a Vision</h2>
+      <button class="modal-close" onclick="closeCreate()">✕</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="form-field">
+        <div class="field-label">How are you creating your vision?</div>
+        <div class="mode-grid">
+          <div class="mode-card selected" id="mode-ai" onclick="selectMode('ai')">
+            <span class="mode-icon">✦</span>
+            <span class="mode-label">AI-Assisted</span>
+            <span class="mode-desc">Describe it. AI renders the concept. You're the author.</span>
+          </div>
+          <div class="mode-card" id="mode-upload" onclick="selectMode('upload')">
+            <span class="mode-icon">◈</span>
+            <span class="mode-label">My Own Art</span>
+            <span class="mode-desc">Upload your sketch, photo, or artwork directly.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI mode panel -->
+      <div id="panel-ai">
+        <div class="ai-panel">
+          <div class="ai-panel-header">
+            <span>✦</span> AI Vision Generator
+          </div>
+          <div class="form-field" style="margin-bottom:0.5rem;">
+            <div class="field-label">Describe what you want to see</div>
+            <textarea class="field-input" id="ai-prompt" placeholder="e.g. A mural of hands reaching upward with roots and flowers, painted across the main entrance wall in warm earth tones..."></textarea>
+          </div>
+          <div class="ai-disclaimer">You are the author. AI is the paintbrush. Your intent and vision own this work.</div>
+        </div>
+        <div class="ai-generating" id="ai-generating">
+          <div class="spinner"></div>
+          <div class="ai-gen-text">Generating your vision...</div>
+        </div>
+      </div>
+
+      <!-- Upload mode panel -->
+      <div id="panel-upload" style="display:none;">
+        <div class="form-field">
+          <div class="field-label">Upload your art or photo</div>
+          <div class="upload-zone" onclick="document.getElementById('file-upload').click()">
+            <input type="file" id="file-upload" accept="image/*" style="display:none" onchange="handleFileUpload(this)">
+            <span class="upload-icon-big">◈</span>
+            <div class="upload-text">
+              Tap to upload a sketch, painting, photo, or collage.<br>
+              <span style="font-size:0.68rem;opacity:0.6;">Any format. Your work. Your vision.</span>
+            </div>
+            <div id="upload-preview" style="margin-top:0.5rem;font-size:0.75rem;color:var(--sage);font-family:'Space Mono',monospace;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <div class="field-label">Title your vision</div>
+        <input type="text" class="field-input" id="v-title" placeholder="Give it a name the community will remember…">
+      </div>
+
+      <div class="form-field">
+        <div class="field-label">Location on the property</div>
+        <input type="text" class="field-input" id="v-location" placeholder="e.g. North courtyard, Building 3 entrance wall…">
+      </div>
+
+      <div class="form-field">
+        <div class="field-label">What does this space mean to you?</div>
+        <textarea class="field-input" id="v-meaning" placeholder="Why here? Why this? What do you want people to feel?"></textarea>
+      </div>
+
+      <div class="form-field">
+        <div class="field-label">Category</div>
+        <div class="category-chips" id="category-chips">
+          <span class="chip selected" data-val="mural" onclick="selectChip(this)">Mural</span>
+          <span class="chip" data-val="garden" onclick="selectChip(this)">Garden</span>
+          <span class="chip" data-val="lighting" onclick="selectChip(this)">Lighting</span>
+          <span class="chip" data-val="sculpture" onclick="selectChip(this)">Sculpture</span>
+          <span class="chip" data-val="seating" onclick="selectChip(this)">Gathering</span>
+          <span class="chip" data-val="other" onclick="selectChip(this)">Other</span>
+        </div>
+      </div>
+
+      <button class="btn-submit" onclick="submitVision()">Submit to the Community →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="detail-modal-wrap" id="detail-modal" onclick="handleDetailBgClick(event)">
+  <div class="detail-modal" id="detail-modal-inner">
+    <div class="detail-img" id="d-img"></div>
+    <div class="detail-body">
+      <div id="d-badges" style="display:flex;gap:0.4rem;margin-bottom:0.7rem;"></div>
+      <div class="detail-title" id="d-title"></div>
+      <div class="detail-meta">
+        <span id="d-loc"></span>
+        <span id="d-cat"></span>
+      </div>
+      <div class="detail-desc" id="d-desc"></div>
+      <div class="progress-bar-detail">
+        <div class="progress-track">
+          <div class="progress-fill-detail" id="d-progress"></div>
+        </div>
+        <div class="progress-label" id="d-progress-label"></div>
+      </div>
+      <div class="detail-actions">
+        <button class="btn-vote-detail" id="d-vote-btn" onclick="voteFromDetail()">▲ Vote for this vision</button>
+        <button class="btn-close-detail" onclick="closeDetail()">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const THRESHOLD = 15;
+let currentDetailId = null;
+let selectedMode = 'ai';
+let selectedCategory = 'mural';
+let currentFilter = 'all';
+let totalVotes = 28;
+
+const EMOJIS = {
+  mural: ['🎨','🖌️','🌈'],
+  garden: ['🌱','🌿','🌻'],
+  lighting: ['💡','✨','🕯️'],
+  sculpture: ['🗿','⚱️','🏛️'],
+  seating: ['🪑','🏕️','⛲'],
+  other: ['✦','◈','◉'],
+};
+
+const BG_CLASSES = ['bg-rust','bg-sage','bg-violet','bg-gold','bg-blue'];
+
+const visions = [
+  {
+    id: 1, mode: 'upload', category: 'mural',
+    title: 'Roots & Routes',
+    location: 'Main Entrance Wall',
+    meaning: 'This wall is the first thing every visitor sees. I want them to see us — where we came from, how we arrived, what we carry. Our roots are not something to hide.',
+    votes: 18, voted: false, activated: true,
+    emoji: '🎨', bg: 'bg-rust',
+    submittedBy: 'A resident',
+  },
+  {
+    id: 2, mode: 'ai', category: 'garden',
+    title: 'The Commons Garden',
+    location: 'North Courtyard',
+    meaning: 'There is dead concrete where there could be food. Families could grow their own vegetables here. It would give kids something to tend and something to eat.',
+    votes: 9, voted: false, activated: false,
+    emoji: '🌱', bg: 'bg-sage',
+    submittedBy: 'AI-assisted vision',
+  },
+  {
+    id: 3, mode: 'ai', category: 'lighting',
+    title: 'Warm Welcome',
+    location: 'Building 3 Entrance',
+    meaning: 'My daughter walks home in the dark every winter evening. The entrance is pitch black. Warm lighting would make her feel safe and make our home feel like a home.',
+    votes: 7, voted: false, activated: false,
+    emoji: '✨', bg: 'bg-gold',
+    submittedBy: 'AI-assisted vision',
+  },
+  {
+    id: 4, mode: 'upload', category: 'sculpture',
+    title: 'The Anchor',
+    location: 'South Courtyard',
+    meaning: 'Something that says — we are here, we are staying, this is ours. A sculpture in the center that the whole community helped design.',
+    votes: 4, voted: false, activated: false,
+    emoji: '⚓', bg: 'bg-violet',
+    submittedBy: 'A resident',
+  },
+];
+
+function renderFeed() {
+  const grid = document.getElementById('feed-grid');
+  grid.innerHTML = '';
+  const filtered = currentFilter === 'all' ? visions : visions.filter(v => v.category === currentFilter);
+  if (filtered.length === 0) {
+    grid.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted);font-family:Space Mono,monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;grid-column:1/-1;">No visions in this category yet — be the first.</div>';
+    return;
+  }
+  filtered.forEach(v => {
+    const pct = Math.min((v.votes / THRESHOLD) * 100, 100);
+    const card = document.createElement('div');
+    card.className = 'vision-card';
+    card.onclick = () => openDetail(v.id);
+    card.innerHTML = `
+      <div class="card-img ${v.bg}">
+        <div class="card-img-inner">${v.emoji}</div>
+        <div class="card-img-overlay"></div>
+        <div class="card-badges">
+          ${v.activated ? '<span class="badge-pill badge-activated">✦ Activated</span>' : ''}
+          ${v.votes >= 12 && !v.activated ? '<span class="badge-pill badge-hot">Hot</span>' : ''}
+          <span class="badge-pill ${v.mode === 'ai' ? 'badge-ai' : 'badge-resident'}">${v.mode === 'ai' ? 'AI-Assisted' : 'Resident Art'}</span>
+        </div>
+        <div class="card-vote-count">${v.votes}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-loc">📍 ${v.location}</div>
+        <div class="card-title">${v.title}</div>
+        <div class="card-desc">${v.meaning.length > 90 ? v.meaning.slice(0,90)+'…' : v.meaning}</div>
+        <div class="card-footer">
+          <div class="vote-strip"><div class="vote-fill ${v.activated ? 'activated' : ''}" style="width:${pct}%"></div></div>
+          <button class="vote-btn ${v.voted ? 'voted' : ''} ${v.activated ? 'activated-btn' : ''}" onclick="event.stopPropagation();voteCard(${v.id}, this)">
+            ${v.activated ? '✦ Ratified' : v.voted ? '✓ Voted' : '▲ Vote'}
+          </button>
+        </div>
+      </div>
+    `;
+    grid.appendChild(card);
+  });
+  updateStats();
+}
+
+function voteCard(id, btn) {
+  const v = visions.find(x => x.id === id);
+  if (!v || v.voted) { showToast('You already voted for this vision.'); return; }
+  v.voted = true;
+  v.votes += 1;
+  totalVotes += 1;
+  if (v.votes >= THRESHOLD && !v.activated) {
+    v.activated = true;
+    showToast(`✦ "${v.title}" is now a community mandate!`);
+  } else {
+    showToast(`▲ Vote counted for "${v.title}"`);
+  }
+  renderFeed();
+  renderActivated();
+  if (currentDetailId === id) openDetail(id);
+}
+
+function filterFeed(cat, el) {
+  currentFilter = cat;
+  document.querySelectorAll('.ticker-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderFeed();
+}
+
+function updateStats() {
+  const activated = visions.filter(v => v.activated).length;
+  const aiCount = visions.filter(v => v.mode === 'ai').length;
+  document.getElementById('hstat-v-num').textContent = visions.length;
+  document.getElementById('hstat-votes-num').textContent = visions.reduce((s,v) => s+v.votes, 0);
+  document.getElementById('c-stat-visions').textContent = visions.length;
+  document.getElementById('c-stat-votes').textContent = visions.reduce((s,v) => s+v.votes, 0);
+  document.getElementById('c-stat-activated').textContent = activated;
+  document.getElementById('c-stat-ai').textContent = aiCount;
+}
+
+function renderActivated() {
+  const feed = document.getElementById('activated-feed');
+  const activated = visions.filter(v => v.activated);
+  if (activated.length === 0) {
+    feed.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--muted);font-family:Space Mono,monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;">No mandates yet — go vote on the feed.</div>';
+    return;
+  }
+  feed.innerHTML = activated.map(v => `
+    <div class="activated-item">
+      <div class="activated-icon">${v.emoji}</div>
+      <div class="activated-info">
+        <div class="activated-title">${v.title}</div>
+        <div class="activated-meta">📍 ${v.location} · ${v.category}</div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.3rem;line-height:1.4;">${v.meaning.slice(0,100)}…</div>
+      </div>
+      <div class="activated-votes">${v.votes}</div>
+    </div>
+  `).join('');
+}
+
+function openDetail(id) {
+  const v = visions.find(x => x.id === id);
+  if (!v) return;
+  currentDetailId = id;
+  const pct = Math.min((v.votes / THRESHOLD) * 100, 100);
+  document.getElementById('d-img').className = 'detail-img ' + v.bg;
+  document.getElementById('d-img').innerHTML = v.emoji;
+  document.getElementById('d-badges').innerHTML = `
+    ${v.activated ? '<span class="badge-pill badge-activated">✦ Activated Mandate</span>' : ''}
+    <span class="badge-pill ${v.mode === 'ai' ? 'badge-ai' : 'badge-resident'}">${v.mode === 'ai' ? 'AI-Assisted' : 'Resident Art'}</span>
+  `;
+  document.getElementById('d-title').textContent = v.title;
+  document.getElementById('d-loc').textContent = '📍 ' + v.location;
+  document.getElementById('d-cat').textContent = v.category;
+  document.getElementById('d-desc').textContent = v.meaning;
+  document.getElementById('d-progress').style.width = pct + '%';
+  document.getElementById('d-progress').className = 'progress-fill-detail' + (v.activated ? ' hot' : '');
+  document.getElementById('d-progress-label').textContent = v.votes + '/' + THRESHOLD + ' votes';
+  const btn = document.getElementById('d-vote-btn');
+  if (v.activated) { btn.textContent = '✦ Community Mandate'; btn.className = 'btn-vote-detail voted'; }
+  else if (v.voted) { btn.textContent = '✓ Voted'; btn.className = 'btn-vote-detail voted'; }
+  else { btn.textContent = '▲ Vote for this vision'; btn.className = 'btn-vote-detail'; }
+  document.getElementById('detail-modal').classList.add('open');
+}
+
+function voteFromDetail() {
+  if (!currentDetailId) return;
+  const v = visions.find(x => x.id === currentDetailId);
+  if (!v || v.voted || v.activated) return;
+  voteCard(currentDetailId, null);
+  openDetail(currentDetailId);
+}
+
+function closeDetail() { document.getElementById('detail-modal').classList.remove('open'); }
+
+function handleDetailBgClick(e) {
+  if (e.target === document.getElementById('detail-modal')) closeDetail();
+}
+
+// ── CREATE FLOW ──
+function openCreate() { document.getElementById('create-modal').classList.add('open'); }
+function closeCreate() { document.getElementById('create-modal').classList.remove('open'); }
+function handleModalBgClick(e) {
+  if (e.target === document.getElementById('create-modal')) closeCreate();
+}
+
+function selectMode(mode) {
+  selectedMode = mode;
+  document.getElementById('mode-ai').classList.toggle('selected', mode === 'ai');
+  document.getElementById('mode-upload').classList.toggle('selected', mode === 'upload');
+  document.getElementById('panel-ai').style.display = mode === 'ai' ? 'block' : 'none';
+  document.getElementById('panel-upload').style.display = mode === 'upload' ? 'block' : 'none';
+}
+
+function selectChip(el) {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedCategory = el.dataset.val;
+}
+
+function handleFileUpload(input) {
+  const preview = document.getElementById('upload-preview');
+  if (input.files && input.files[0]) preview.textContent = '✓ ' + input.files[0].name;
+}
+
+function submitVision() {
+  const title = document.getElementById('v-title').value.trim();
+  const location = document.getElementById('v-location').value.trim();
+  const meaning = document.getElementById('v-meaning').value.trim();
+  const aiPrompt = document.getElementById('ai-prompt').value.trim();
+
+  if (!title || !location || !meaning) { showToast('Please fill in all fields.'); return; }
+  if (selectedMode === 'ai' && !aiPrompt) { showToast('Describe your vision for the AI to render.'); return; }
+
+  const catEmojis = EMOJIS[selectedCategory] || EMOJIS.other;
+  const emoji = catEmojis[Math.floor(Math.random() * catEmojis.length)];
+  const bg = BG_CLASSES[Math.floor(Math.random() * BG_CLASSES.length)];
+
+  if (selectedMode === 'ai') {
+    document.getElementById('ai-generating').classList.add('show');
+    setTimeout(() => {
+      document.getElementById('ai-generating').classList.remove('show');
+      addVision({ title, location, meaning, emoji, bg });
+    }, 2000);
+  } else {
+    addVision({ title, location, meaning, emoji, bg });
+  }
+}
+
+function addVision({ title, location, meaning, emoji, bg }) {
+  const v = {
+    id: visions.length + 1,
+    mode: selectedMode,
+    category: selectedCategory,
+    title, location, meaning,
+    votes: 0, voted: false, activated: false,
+    emoji, bg,
+    submittedBy: selectedMode === 'ai' ? 'AI-assisted vision' : 'A resident',
+  };
+  visions.unshift(v);
+  ['v-title','v-location','v-meaning','ai-prompt'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('upload-preview').textContent = '';
+  closeCreate();
+  showToast('✦ Vision dropped to the community.');
+  renderFeed();
+  renderActivated();
+}
+
+// ── NAV ──
+function showPage(id, tabEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (tabEl) tabEl.classList.add('active');
+  if (id === 'community') { renderActivated(); updateStats(); }
+  window.scrollTo(0, 0);
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+renderFeed();
+renderActivated();
+</script>
+</body>
+</html>
