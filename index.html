@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Aesthetica</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <style>
 :root {
   --black: #0a0a0a;
@@ -134,56 +135,154 @@ header {
 .page { display: none; }
 .page.active { display: block; }
 
-/* ── VISION FEED HERO ── */
-.feed-hero {
+/* ── HEATMAP HERO ── */
+.heatmap-hero {
   background: var(--black);
-  padding: 2rem 1.5rem 1.5rem;
   position: relative;
   overflow: hidden;
 }
 
-.feed-hero-bg {
-  position: absolute;
-  inset: 0;
-  font-family: 'Satoshi', sans-serif;
-  font-size: 10rem;
-  line-height: 1;
-  color: rgba(255,255,255,0.025);
-  pointer-events: none;
-  padding: 0 1rem;
-  letter-spacing: 0.04em;
-  white-space: nowrap;
-  overflow: hidden;
+.heatmap-top-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.8rem 1.5rem 1rem;
+  position: relative;
+  z-index: 10;
 }
 
-.feed-hero h1 {
+.heatmap-title-block h1 {
   font-family: 'Satoshi', sans-serif;
   font-size: clamp(2.2rem, 7vw, 4rem);
   letter-spacing: 0.04em;
   color: var(--offwhite);
   line-height: 0.95;
-  position: relative;
 }
-
-.feed-hero h1 span { color: var(--rust); }
-
-.feed-hero p {
+.heatmap-title-block h1 span { color: var(--rust); }
+.heatmap-title-block p {
   font-size: 0.82rem;
   color: rgba(255,255,255,0.45);
-  margin-top: 0.7rem;
-  max-width: 420px;
+  margin-top: 0.6rem;
+  max-width: 320px;
   line-height: 1.6;
-  position: relative;
 }
 
-.ticker {
-  margin-top: 1.2rem;
+.heatmap-legend {
   display: flex;
-  gap: 0.6rem;
-  flex-wrap: wrap;
-  position: relative;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+  padding-top: 0.25rem;
+}
+.legend-bar {
+  width: 72px;
+  height: 7px;
+  border-radius: 4px;
+  background: linear-gradient(to right, #0000ff, #00ccff, #00ff88, #ffee00, #ff2200);
+  opacity: 0.8;
+}
+.legend-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 72px;
+}
+.legend-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.48rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.35);
 }
 
+/* Map */
+#heatmap-container {
+  width: 100%;
+  height: 320px;
+  position: relative;
+  z-index: 1;
+}
+.leaflet-container { background: #0d1520 !important; }
+
+/* Popup */
+.leaflet-popup-content-wrapper {
+  background: var(--black) !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(255,255,255,0.12) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+  padding: 0 !important;
+}
+.leaflet-popup-tip { background: var(--black) !important; }
+.leaflet-popup-content { margin: 0 !important; min-width: 210px; }
+
+.popup-inner { padding: 0.85rem 1rem; }
+.popup-city {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--rust);
+  margin-bottom: 0.5rem;
+}
+.popup-vision {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+  cursor: pointer;
+}
+.popup-vision:last-child { border-bottom: none; }
+.popup-vision:hover .popup-v-title { color: var(--rust); }
+.popup-v-emoji { font-size: 1.1rem; flex-shrink: 0; }
+.popup-v-info { flex: 1; }
+.popup-v-title {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 0.95rem;
+  color: var(--offwhite);
+  line-height: 1.1;
+  transition: color 0.1s;
+}
+.popup-v-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: rgba(255,255,255,0.3);
+  margin-top: 0.1rem;
+}
+.popup-v-votes {
+  font-family: 'Satoshi', sans-serif;
+  font-size: 1.2rem;
+  color: var(--gold);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Filter strip below map */
+.heatmap-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1.5rem;
+  background: rgba(0,0,0,0.55);
+  border-top: 1px solid rgba(255,255,255,0.05);
+  overflow-x: auto;
+  scrollbar-width: none;
+  position: relative;
+  z-index: 10;
+}
+.heatmap-filters::-webkit-scrollbar { display: none; }
+.filter-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── TICKER PILLS (shared between hero + filters) ── */
 .ticker-pill {
   font-family: 'Space Mono', monospace;
   font-size: 0.6rem;
@@ -195,12 +294,21 @@ header {
   border-radius: 20px;
   cursor: pointer;
   transition: all 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+  background: transparent;
 }
 .ticker-pill:hover, .ticker-pill.active {
   background: var(--rust);
   border-color: var(--rust);
   color: #fff;
 }
+
+/* Leaflet z-index */
+.leaflet-pane { z-index: 1 !important; }
+.leaflet-top, .leaflet-bottom { z-index: 5 !important; }
+.leaflet-popup-pane { z-index: 10 !important; }
+.leaflet-control { z-index: 5 !important; }
 
 /* ── VISION CARD GRID ── */
 .feed-grid {
@@ -413,7 +521,6 @@ header {
 
 .modal-body { padding: 1.5rem; }
 
-/* Mode picker */
 .mode-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -449,7 +556,6 @@ header {
   display: block;
 }
 
-/* Form elements */
 .form-field {
   display: flex;
   flex-direction: column;
@@ -489,11 +595,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
   transition: border-color 0.15s;
 }
 .upload-zone:hover { border-color: var(--rust); }
-.upload-text {
-  font-size: 0.78rem;
-  color: var(--muted);
-  line-height: 1.5;
-}
+.upload-text { font-size: 0.78rem; color: var(--muted); line-height: 1.5; }
 .upload-icon-big { font-size: 2rem; display: block; margin-bottom: 0.4rem; }
 
 .ai-panel {
@@ -524,11 +626,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
   line-height: 1.4;
 }
 
-.category-chips {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
+.category-chips { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .chip {
   font-family: 'Space Mono', monospace;
   font-size: 0.6rem;
@@ -564,7 +662,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
 }
 .btn-submit:hover { background: #a32d07; }
 
-/* ── AI STATUS ── */
 .ai-generating {
   display: none;
   align-items: center;
@@ -768,9 +865,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
   line-height: 1.4;
 }
 
-.activated-feed {
-  padding: 1.5rem;
-}
+.activated-feed { padding: 1.5rem; }
 .activated-item {
   display: flex;
   gap: 1rem;
@@ -853,10 +948,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
   font-weight: 700;
   margin-bottom: 0.3rem;
 }
-.principle-text p {
-  font-size: 0.8rem;
-  margin: 0;
-}
+.principle-text p { font-size: 0.8rem; margin: 0; }
 
 /* ── TOAST ── */
 .toast {
@@ -880,7 +972,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* Colorful card backgrounds */
 .bg-rust { background: #2a1008; }
 .bg-sage { background: #0d1f14; }
 .bg-violet { background: #180f2e; }
@@ -916,11 +1007,25 @@ textarea.field-input { resize: vertical; min-height: 80px; }
      FEED PAGE
 ════════════════════════════ -->
 <div class="page active" id="page-feed">
-  <div class="feed-hero">
-    <div class="feed-hero-bg">VISION</div>
-    <h1>What does<br>your block<br><span>deserve?</span></h1>
-    <p>Drop a vision. The community votes it into reality. Aesthetic justice isn't decoration — it's power.</p>
-    <div class="ticker">
+
+  <!-- HEATMAP HERO (replaces old feed-hero) -->
+  <div class="heatmap-hero">
+    <div class="heatmap-top-bar">
+      <div class="heatmap-title-block">
+        <h1>Where is the<br>movement <span>alive?</span></h1>
+        <p>Click any hotspot to see what your community is demanding.</p>
+      </div>
+      <div class="heatmap-legend">
+        <div class="legend-bar"></div>
+        <div class="legend-labels">
+          <span class="legend-label">Few</span>
+          <span class="legend-label">Many</span>
+        </div>
+      </div>
+    </div>
+    <div id="heatmap-container"></div>
+    <div class="heatmap-filters">
+      <span class="filter-label">Filter:</span>
       <span class="ticker-pill active" onclick="filterFeed('all', this)">All</span>
       <span class="ticker-pill" onclick="filterFeed('mural', this)">Murals</span>
       <span class="ticker-pill" onclick="filterFeed('garden', this)">Gardens</span>
@@ -929,6 +1034,7 @@ textarea.field-input { resize: vertical; min-height: 80px; }
       <span class="ticker-pill" onclick="filterFeed('seating', this)">Gathering</span>
     </div>
   </div>
+
   <div class="feed-grid" id="feed-grid"></div>
 </div>
 
@@ -986,7 +1092,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
     <p>
       Aesthetica gives residents two creative paths and one democratic mechanism. Drop your vision. Let the community ratify it. Take the mandate into any room that needs to hear it.
     </p>
-
     <div style="margin-top: 1.5rem;">
       <div class="principle-row">
         <div class="principle-num">01</div>
@@ -1047,7 +1152,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- AI mode panel -->
       <div id="panel-ai">
         <div class="ai-panel">
           <div class="ai-panel-header">
@@ -1065,7 +1169,6 @@ textarea.field-input { resize: vertical; min-height: 80px; }
         </div>
       </div>
 
-      <!-- Upload mode panel -->
       <div id="panel-upload" style="display:none;">
         <div class="form-field">
           <div class="field-label">Upload your art or photo</div>
@@ -1141,6 +1244,8 @@ textarea.field-input { resize: vertical; min-height: 80px; }
 
 <div class="toast" id="toast"></div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 <script>
 const THRESHOLD = 15;
 let currentDetailId = null;
@@ -1161,48 +1266,90 @@ const EMOJIS = {
 const BG_CLASSES = ['bg-rust','bg-sage','bg-violet','bg-gold','bg-blue'];
 
 const visions = [
-  {
-    id: 1, mode: 'upload', category: 'mural',
-    title: 'Roots & Routes',
-    location: 'Main Entrance Wall',
-    meaning: 'This wall is the first thing every visitor sees. I want them to see us — where we came from, how we arrived, what we carry. Our roots are not something to hide.',
-    votes: 18, voted: false, activated: true,
-    emoji: '🎨', bg: 'bg-rust',
-    submittedBy: 'A resident',
-  },
-  {
-    id: 2, mode: 'ai', category: 'garden',
-    title: 'The Commons Garden',
-    location: 'North Courtyard',
-    meaning: 'There is dead concrete where there could be food. Families could grow their own vegetables here. It would give kids something to tend and something to eat.',
-    votes: 9, voted: false, activated: false,
-    emoji: '🌱', bg: 'bg-sage',
-    submittedBy: 'AI-assisted vision',
-  },
-  {
-    id: 3, mode: 'ai', category: 'lighting',
-    title: 'Warm Welcome',
-    location: 'Building 3 Entrance',
-    meaning: 'My daughter walks home in the dark every winter evening. The entrance is pitch black. Warm lighting would make her feel safe and make our home feel like a home.',
-    votes: 7, voted: false, activated: false,
-    emoji: '✨', bg: 'bg-gold',
-    submittedBy: 'AI-assisted vision',
-  },
-  {
-    id: 4, mode: 'upload', category: 'sculpture',
-    title: 'The Anchor',
-    location: 'South Courtyard',
-    meaning: 'Something that says — we are here, we are staying, this is ours. A sculpture in the center that the whole community helped design.',
-    votes: 4, voted: false, activated: false,
-    emoji: '⚓', bg: 'bg-violet',
-    submittedBy: 'A resident',
-  },
+  { id:1, mode:'upload', category:'mural', title:'Roots & Routes', location:'Main Entrance Wall', meaning:'This wall is the first thing every visitor sees. I want them to see us — where we came from, how we arrived, what we carry. Our roots are not something to hide.', votes:18, voted:false, activated:true, emoji:'🎨', bg:'bg-rust', submittedBy:'A resident', lat:42.2626, lng:-71.8023 },
+  { id:2, mode:'ai', category:'garden', title:'The Commons Garden', location:'North Courtyard', meaning:'There is dead concrete where there could be food. Families could grow their own vegetables here. It would give kids something to tend and something to eat.', votes:9, voted:false, activated:false, emoji:'🌱', bg:'bg-sage', submittedBy:'AI-assisted vision', lat:42.2700, lng:-71.7980 },
+  { id:3, mode:'ai', category:'lighting', title:'Warm Welcome', location:'Building 3 Entrance', meaning:'My daughter walks home in the dark every winter evening. The entrance is pitch black. Warm lighting would make her feel safe and make our home feel like a home.', votes:7, voted:false, activated:false, emoji:'✨', bg:'bg-gold', submittedBy:'AI-assisted vision', lat:42.2580, lng:-71.8100 },
+  { id:4, mode:'upload', category:'sculpture', title:'The Anchor', location:'South Courtyard', meaning:'Something that says — we are here, we are staying, this is ours. A sculpture in the center that the whole community helped design.', votes:4, voted:false, activated:false, emoji:'⚓', bg:'bg-violet', submittedBy:'A resident', lat:42.2550, lng:-71.7950 },
 ];
 
+// Simulated national heat data — Worcester is the hot core
+const nationalHeatPoints = [
+  [42.26,-71.80,1.0],[42.27,-71.79,0.9],[42.25,-71.81,0.85],[42.28,-71.78,0.7],[42.24,-71.82,0.6],
+  [42.36,-71.06,0.75],[42.35,-71.08,0.6],[42.37,-71.05,0.5],
+  [40.71,-74.01,0.85],[40.73,-73.99,0.7],[40.68,-73.94,0.8],[40.65,-73.95,0.6],
+  [39.95,-75.17,0.65],[39.93,-75.19,0.5],
+  [39.29,-76.61,0.55],[38.90,-77.04,0.6],
+  [33.75,-84.39,0.7],[33.77,-84.37,0.55],
+  [41.88,-87.63,0.8],[41.85,-87.65,0.65],[41.90,-87.62,0.5],
+  [42.33,-83.05,0.6],[41.50,-81.69,0.5],
+  [29.76,-95.37,0.7],[29.74,-95.39,0.55],
+  [32.78,-96.80,0.6],[32.76,-96.81,0.45],
+  [34.05,-118.24,0.8],[34.03,-118.26,0.65],[34.07,-118.22,0.55],
+  [37.80,-122.27,0.75],[37.78,-122.42,0.6],
+  [47.61,-122.33,0.55],[39.74,-104.98,0.5],
+  [33.45,-112.07,0.55],[44.98,-93.27,0.6],
+  [35.15,-90.05,0.55],[29.95,-90.07,0.6],
+  [25.77,-80.19,0.65],[25.79,-80.17,0.5],
+];
+
+// ── INIT MAP ──
+let map;
+function initMap() {
+  map = L.map('heatmap-container', {
+    center: [38.5, -96],
+    zoom: 4,
+    zoomControl: true,
+    scrollWheelZoom: false,
+    attributionControl: false,
+  });
+
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png', { maxZoom: 18 }).addTo(map);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png', { maxZoom: 18, opacity: 0.4 }).addTo(map);
+
+  L.heatLayer(nationalHeatPoints, {
+    radius: 28, blur: 22, maxZoom: 10, max: 1.0,
+    gradient: { 0.0:'#0000ff', 0.3:'#00ccff', 0.5:'#00ff88', 0.7:'#ffee00', 1.0:'#ff2200' },
+  }).addTo(map);
+
+  // Vision markers
+  visions.forEach(v => {
+    const markerHtml = `<div style="width:32px;height:32px;border-radius:50%;background:${v.activated?'#c4390a':'#c89b2a'};border:2px solid rgba(255,255,255,0.8);display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 0 12px ${v.activated?'rgba(196,57,10,0.7)':'rgba(200,155,42,0.6)'};cursor:pointer;">${v.emoji}</div>`;
+    const icon = L.divIcon({ html: markerHtml, className:'', iconSize:[32,32], iconAnchor:[16,16] });
+    const marker = L.marker([v.lat, v.lng], { icon }).addTo(map);
+
+    marker.on('click', () => {
+      const sorted = [...visions].sort((a,b) => b.votes - a.votes);
+      const popupHtml = `
+        <div class="popup-inner">
+          <div class="popup-city">📍 Worcester, MA · ${sorted.length} visions</div>
+          ${sorted.map(pv => `
+            <div class="popup-vision" onclick="closePopupAndOpenDetail(${pv.id})">
+              <div class="popup-v-emoji">${pv.emoji}</div>
+              <div class="popup-v-info">
+                <div class="popup-v-title">${pv.title}</div>
+                <div class="popup-v-meta">${pv.location}${pv.activated?' · ✦ Ratified':''}</div>
+              </div>
+              <div class="popup-v-votes">${pv.votes}</div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      marker.bindPopup(L.popup({ maxWidth:260, minWidth:220, closeButton:true }).setContent(popupHtml)).openPopup();
+    });
+  });
+}
+
+function closePopupAndOpenDetail(id) {
+  map.closePopup();
+  setTimeout(() => openDetail(id), 150);
+}
+
+// ── FEED ──
 function renderFeed() {
   const grid = document.getElementById('feed-grid');
   grid.innerHTML = '';
-  const filtered = currentFilter === 'all' ? visions : visions.filter(v => v.category === currentFilter);
+  let filtered = currentFilter === 'all' ? [...visions] : visions.filter(v => v.category === currentFilter);
+  filtered.sort((a,b) => b.votes - a.votes);
   if (filtered.length === 0) {
     grid.innerHTML = '<div style="padding:3rem;text-align:center;color:var(--muted);font-family:Space Mono,monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;grid-column:1/-1;">No visions in this category yet — be the first.</div>';
     return;
@@ -1329,17 +1476,10 @@ function voteFromDetail() {
 }
 
 function closeDetail() { document.getElementById('detail-modal').classList.remove('open'); }
-
-function handleDetailBgClick(e) {
-  if (e.target === document.getElementById('detail-modal')) closeDetail();
-}
-
-// ── CREATE FLOW ──
+function handleDetailBgClick(e) { if (e.target === document.getElementById('detail-modal')) closeDetail(); }
 function openCreate() { document.getElementById('create-modal').classList.add('open'); }
 function closeCreate() { document.getElementById('create-modal').classList.remove('open'); }
-function handleModalBgClick(e) {
-  if (e.target === document.getElementById('create-modal')) closeCreate();
-}
+function handleModalBgClick(e) { if (e.target === document.getElementById('create-modal')) closeCreate(); }
 
 function selectMode(mode) {
   selectedMode = mode;
@@ -1365,14 +1505,11 @@ function submitVision() {
   const location = document.getElementById('v-location').value.trim();
   const meaning = document.getElementById('v-meaning').value.trim();
   const aiPrompt = document.getElementById('ai-prompt').value.trim();
-
   if (!title || !location || !meaning) { showToast('Please fill in all fields.'); return; }
   if (selectedMode === 'ai' && !aiPrompt) { showToast('Describe your vision for the AI to render.'); return; }
-
   const catEmojis = EMOJIS[selectedCategory] || EMOJIS.other;
   const emoji = catEmojis[Math.floor(Math.random() * catEmojis.length)];
   const bg = BG_CLASSES[Math.floor(Math.random() * BG_CLASSES.length)];
-
   if (selectedMode === 'ai') {
     document.getElementById('ai-generating').classList.add('show');
     setTimeout(() => {
@@ -1393,6 +1530,8 @@ function addVision({ title, location, meaning, emoji, bg }) {
     votes: 0, voted: false, activated: false,
     emoji, bg,
     submittedBy: selectedMode === 'ai' ? 'AI-assisted vision' : 'A resident',
+    lat: 42.26 + ((Math.random()-0.5)*0.04),
+    lng: -71.80 + ((Math.random()-0.5)*0.06),
   };
   visions.unshift(v);
   ['v-title','v-location','v-meaning','ai-prompt'].forEach(id => document.getElementById(id).value = '');
@@ -1403,13 +1542,13 @@ function addVision({ title, location, meaning, emoji, bg }) {
   renderActivated();
 }
 
-// ── NAV ──
 function showPage(id, tabEl) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   document.getElementById('page-' + id).classList.add('active');
   if (tabEl) tabEl.classList.add('active');
   if (id === 'community') { renderActivated(); updateStats(); }
+  if (id === 'feed') { setTimeout(() => map && map.invalidateSize(), 100); }
   window.scrollTo(0, 0);
 }
 
@@ -1422,6 +1561,7 @@ function showToast(msg) {
 
 renderFeed();
 renderActivated();
+window.addEventListener('load', initMap);
 </script>
 </body>
 </html>
