@@ -1,6 +1,3 @@
-// api/generate.js
-// Vercel Serverless Function — AI Vision Generation
-// Keeps your Anthropic API key safe on the server
 
 module.exports = async function handler(req, res) {
   // Only allow POST
@@ -30,35 +27,6 @@ module.exports = async function handler(req, res) {
 
   try {
     const messageContent = [];
-
-    // If user uploaded a photo of the space, include it
-    if (imageBase64 && mimeType) {
-      messageContent.push({
-        type: 'image',
-        source: {
-          type: 'base64',
-          media_type: mimeType,
-          data: imageBase64,
-        },
-      });
-      messageContent.push({
-        type: 'text',
-        text: `You are an expert visual artist and urban muralist. The user has uploaded a photo of a real space in their affordable housing community. Generate a vivid, detailed description of what this space would look like transformed by the following community vision: "${prompt}".
-
-Describe the transformation in painterly detail — colors, textures, the emotional atmosphere, what residents would see and feel walking past. Make it feel real and alive. Focus on the human impact. Keep your response to 3-4 sentences, rich and specific.
-
-Do not include any preamble or explanation. Just describe the transformed vision directly as if you are seeing it.`,
-      });
-    } else {
-      messageContent.push({
-        type: 'text',
-        text: `You are an expert visual artist and urban muralist creating community art visions for affordable housing residents. Describe in vivid, painterly detail what this community vision would look like as public art: "${prompt}".
-
-Describe colors, textures, scale, the emotional atmosphere, and what residents would experience. Make it feel alive and real. Keep your response to 3-4 sentences, rich and specific.
-
-Do not include any preamble or explanation. Just describe the vision directly.`,
-      });
-    }
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
